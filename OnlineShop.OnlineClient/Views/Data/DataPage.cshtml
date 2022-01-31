@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Data form";
+}
+
+<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+    <div class="px-3 pt-2 min-vh-100">
+        <ul class="nav flex-column mb-sm-auto mb-0 align-items-sm-start" id="menuItems">
+            <li>
+                <a class="nav-link px-0" asp-action="Orders" asp-controller="Data">Orders</a>
+            </li>
+            <li>
+                <a class="nav-link px-0" asp-action="Clients" asp-controller="Data">Clients</a>
+            </li>
+            <li>
+                <a class="nav-link px-0" asp-action="Managers" asp-controller="Data">Managers</a>
+            </li>
+            <li>
+                <a class="nav-link px-0" asp-action="Items" asp-controller="Data">Items</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="col-md-9">
+    @*@await Html.PartialAsync("Orders")*@
+</div>

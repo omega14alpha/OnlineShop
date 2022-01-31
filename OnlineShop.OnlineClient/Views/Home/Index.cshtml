@@ -1,0 +1,19 @@
+﻿@model OnlineShop.OnlineClient.Pagination.Models.PaginationModel<OnlineShop.BusinessLogic.Models.OrderModel>
+@{
+    ViewData["Title"] = "OnlneShop";
+}
+
+<div class="ml-5 mt-5">
+    <p> Welcome to our online store</p>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <p>Authorization is required to start viewing the archive</p>
+        <a asp-action="DataPage" asp-controller="Data">Start</a>
+    }
+    else
+    {
+        <p>Authorization is required to start viewing the archive</p>
+    }
+
+</div>

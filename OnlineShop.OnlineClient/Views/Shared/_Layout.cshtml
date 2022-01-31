@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8" name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css//orderShopStyle.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-end">
+            <a class="navbar-brand" asp-action="Index" asp-controller="Home">Home</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a class="btn btn-light btn-success ml-auto mr-1" asp-action="Logout" asp-controller="Account">Logout</a>
+            }
+            else
+            {
+                <a class="btn btn-light btn-success ml-auto mr-1" asp-action="Login" asp-controller="Account">Login</a>
+                <a class="btn btn-info" asp-action="Register" asp-controller="Account">Sign up</a>
+            }
+        </nav>
+    </header>
+    <div class="container body-content row">
+        @RenderBody()
+        <footer class="text-center text-white fixed-bottom bg-dark">
+            <hr class="footerDivider" />
+            <div class="container"></div>
+            <div class="text-left text-white pb-3 pl-5">© 2022 Online Shop</div>
+        </footer>
+    </div>
+</body>
+</html>
