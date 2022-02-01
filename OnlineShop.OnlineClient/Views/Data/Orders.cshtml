@@ -26,6 +26,11 @@
                 <td>Client</td>
                 <td>Item</td>
                 <td>Price</td>
+                @if (User.IsInRole("admin"))
+                {
+                    <td>Edit</td>
+                    <td>Delete</td>
+                }
             </tr>
         </thead>
         <tbody>
@@ -38,6 +43,14 @@
                     <td>@order.Client</td>
                     <td>@order.Item</td>
                     <td>@order.AmountOfMoney</td>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <td>
+                            <a asp-action="EditOrder" asp-controller="Data" asp-route-id="@order.OrderId">Edit</a>
+                        </td>
+                        @* <td><a asp-action="DeleteOrder" asp-controller="Data" asp-route-id="@order.OrderId">Delete</a></td>*@
+                        <td><input type="button" asp-action="DeleteOrder" asp-controller="Data" asp-route-id="@order.OrderId" onclick="ConfirmDelete()" />Delete</td>
+                    }
                 </tr>
             }
         </tbody>
@@ -49,9 +62,17 @@
 </div>
 
 <script>
+    function ConfirmDelete()
+    {
+        var x = confirm("Are you sure you want to delete?");
+        return x;
+    }
+</script>
+
+<script>
     $(function() {
-        $('#datetimepicker').datetimepicker({
-            locale: 'ru'
-        });
+    $('#datetimepicker').datetimepicker({
+    locale: 'ru'
+    });
     });
 </script>

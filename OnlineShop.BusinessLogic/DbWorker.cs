@@ -1,8 +1,11 @@
-﻿using OnlineShop.BusinessLogic.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.BusinessLogic.Interfaces;
 using OnlineShop.BusinessLogic.Models;
 using OnlineShop.DataAccess.Contexts;
+using OnlineShop.DataAccess.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnlineShop.BusinessLogic
 {
@@ -22,10 +25,10 @@ namespace OnlineShop.BusinessLogic
             comonEntityCount = _dbContext.Orders.Count();
             var orderModels = new List<OrderModel>();
             var orders = _dbContext.Orders.OrderBy(s => s.Date).Skip((pageNumber - 1) * totalSize).Take(totalSize).ToList();
-            var id = (pageNumber - 1) * totalSize;
+            var id = (pageNumber - 1) * totalSize + 1;
             foreach (var order in orders)
             {
-                var newOrder = new OrderModel()
+               /* var newOrder = new OrderModel()
                 {
                     Id = id++,
                     OrderId = order.Id,
@@ -36,7 +39,8 @@ namespace OnlineShop.BusinessLogic
                     AmountOfMoney = order.AmountOfMoney
                 };
 
-                orderModels.Add(newOrder);
+                orderModels.Add(newOrder);*/
+                orderModels.Add(CreateOrderModel(order, id));
             }            
 
             return orderModels;
@@ -100,6 +104,26 @@ namespace OnlineShop.BusinessLogic
             }
 
             return managerModels;
+        }
+
+        public async Task<OrderModel> GetOrderAsync(int? id)
+        {
+            var order = await _dbContext.Orders.FirstOrDefaultAsync(i => i.Id == id);
+            return CreateOrderModel(order, 1);
+        }
+
+        private OrderModel CreateOrderModel(Order order, int id)
+        {
+            return new OrderModel()
+            {
+                Id = id++,
+                OrderId = order.Id,
+                Date = order.Date.ToString(DatePattern),
+                Manager = _dbContext.Managers?.FirstOrDefault(m => m.Id == order.ManagerId).Surname,
+                Client = _dbContext.Clients?.FirstOrDefault(c => c.Id == order.ClientId).Name,
+                Item = _dbContext.Items?.FirstOrDefault(i => i.Id == order.ItemId).Name,
+                AmountOfMoney = order.AmountOfMoney
+            };
         }
     }
 }

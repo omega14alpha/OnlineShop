@@ -9,10 +9,20 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-end">
-            <a class="navbar-brand" asp-action="Index" asp-controller="Home">Home</a>
+
+            <ul class="nav navbar-nav">
+                <li>
+                    <a class="nav-link m-1 active" asp-action="Index" asp-controller="Home">Home</a>
+                </li>
+                <li>
+                    <a class="nav-link m-1" asp-action="About" asp-controller="Home">About</a>
+                </li>
+            </ul>
+
             @if (User.Identity.IsAuthenticated)
             {
                 <a class="btn btn-light btn-success ml-auto mr-1" asp-action="Logout" asp-controller="Account">Logout</a>
+                <a class="btn btn-light btn-success mr-1" asp-action="ChangePassword" asp-controller="Account">Change password</a>
             }
             else
             {

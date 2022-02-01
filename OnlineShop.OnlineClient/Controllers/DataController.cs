@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnlineShop.BusinessLogic.Interfaces;
 using OnlineShop.BusinessLogic.Models;
 using OnlineShop.OnlineClient.Pagination.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OnlineShop.OnlineClient.Controllers
 {
@@ -26,7 +28,7 @@ namespace OnlineShop.OnlineClient.Controllers
             return View();
         }
 
-        //  [Authorize(Roles = "user, admin")]
+        [Authorize(Roles = "user, admin")]
         public IActionResult Orders(int page = 1)
         {
             var orders = _worker.GetOrders(page, PageSize, out int count);
@@ -34,7 +36,7 @@ namespace OnlineShop.OnlineClient.Controllers
             return View(viewModel);
         }
 
-        //  [Authorize(Roles = "user, admin")]
+        [Authorize(Roles = "admin")]
         public IActionResult Clients(int page = 1)
         {
             var clients = _worker.GetClients(page, PageSize, out int count);
@@ -58,10 +60,31 @@ namespace OnlineShop.OnlineClient.Controllers
             return View(viewModel);
         }
 
-        public IActionResult AlterOrder(OrderModel model)
+        public async Task<IActionResult> EditOrder(int? id)
+        {
+            if (id != null)
+            {
+                var order = await _worker.GetOrderAsync(id);
+                if (order != null)
+                {
+                    return View(order);
+                }
+            }
+
+            return RedirectToAction("Orders");
+        }
+
+        [HttpPost]
+        public IActionResult SaveOrder(OrderModel model)
         {
 
-            return View();
+            return RedirectToAction("Orders");
+        }
+
+        public IActionResult DeleteOrder(OrderModel model)
+        {
+
+            return View("Orders");
         }
 
         private PaginationModel<T> CreatePagination<T>(IEnumerable<T> collection, int page, int count)

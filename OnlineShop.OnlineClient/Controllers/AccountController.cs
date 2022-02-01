@@ -85,9 +85,11 @@ namespace OnlineShop.OnlineClient.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> ChangePassword(string id)
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword()
         {
-            UserModel user = await _userManager.FindByIdAsync(id);
+            var userId = _userManager.GetUserId(User);
+            UserModel user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 return NotFound();
