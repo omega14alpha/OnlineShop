@@ -10,6 +10,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using OnlineShop.OnlineClient.Identity.Contexts;
 using OnlineShop.OnlineClient.Identity.Models;
+using OnlineShop.DataAccess.Interfaces;
+using OnlineShop.DataAccess.Repositories;
+using OnlineShop.DataAccess.Entities;
+using OnlineShop.BusinessLogic.Models;
+using OnlineShop.DataAccess;
 
 namespace OnlineShop.OnlineClient
 {
@@ -25,12 +30,19 @@ namespace OnlineShop.OnlineClient
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IDbWorker, DbWorker>();
+            //  services.AddScoped(typeof(IRepository<Order>), typeof(DbRepository<Order>));
+                        
             services.AddDbContext<DbOrderContext>().AddDbContext<DbIdentityContext>((serviceProvider, options) =>
             {
                 options.UseSqlServer(_configuration["AppConfig:ConnectionStrings:OnlineShopConnectionString"]);
                 options.UseSqlServer(_configuration["AppConfig:ConnectionStrings:OnlineUserShopConnectionString"]);
             });
+
+            services.AddScoped(provider => new DataBaseUoW(provider.GetRequiredService<DbOrderContext>()));
+            services.AddScoped<IModelWorker<OrderModel>>(provider => new OrderWorker(provider.GetRequiredService<DataBaseUoW>()));
+            services.AddScoped<IModelWorker<ManagerModel>>(provider => new ManagerWorker(provider.GetRequiredService<DataBaseUoW>()));
+            services.AddScoped<IModelWorker<ClientModel>>(provider => new ClientWorker(provider.GetRequiredService<DataBaseUoW>()));
+            services.AddScoped<IModelWorker<ItemModel>>(provider => new ItemWorker(provider.GetRequiredService<DataBaseUoW>()));
 
             services.AddIdentity<UserModel, IdentityRole>(options =>
             {

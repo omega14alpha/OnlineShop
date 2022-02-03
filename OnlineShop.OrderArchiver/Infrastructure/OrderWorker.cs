@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using OnlineShop.DataAccess;
 using OnlineShop.DataAccess.Entities;
 using OnlineShop.OrderArchiver.Interfaces;
 using System;
 using System.Globalization;
-using System.Linq;
 
 namespace OnlineShop.OrderArchiver.Infrastructure
 {
@@ -21,14 +20,13 @@ namespace OnlineShop.OrderArchiver.Infrastructure
 
         private const string dataFormat = "dd.MM.yyyy";
 
-
-        private readonly DbContext _dbContext;
+        private readonly DataBaseUoW _uow;
 
         private readonly object _locker;
 
-        public OrderWorker(DbContext dbContext, object locker)
+        public OrderWorker(DataBaseUoW uow, object locker)
         {
-            _dbContext = dbContext;
+            _uow = uow;
             _locker = locker;
         }
 
@@ -39,32 +37,25 @@ namespace OnlineShop.OrderArchiver.Infrastructure
             {
                 var order = new Order()
                 {
-                    Manager = GetOrSaveModel(new Manager() { Surname = dataArr[ManagerNameIndex] }, s => s.Surname == dataArr[ManagerNameIndex]),
+                    Manager = _uow.Managers.GetOrAddEntity(new Manager() { Surname = dataArr[ManagerNameIndex] }, s => s.Surname == dataArr[ManagerNameIndex]),
                     Date = DateTime.ParseExact(dataArr[DateIndex], dataFormat, CultureInfo.InvariantCulture),
-                    Client = GetOrSaveModel(new Client() { Name = dataArr[ClientNameIndex] }, s => s.Name == dataArr[ClientNameIndex]),
-                    Item = GetOrSaveModel(new Item() { Name = dataArr[ItemNameIndex] }, s => s.Name == dataArr[ItemNameIndex]),
+                    Client = _uow.Clients.GetOrAddEntity(new Client() { Name = dataArr[ClientNameIndex] }, s => s.Name == dataArr[ClientNameIndex]),
+                    Item = _uow.Items.GetOrAddEntity(new Item() { Name = dataArr[ItemNameIndex] }, s => s.Name == dataArr[ItemNameIndex]),
                     AmountOfMoney = Convert.ToDouble(dataArr[ItemPriceIndex], CultureInfo.GetCultureInfo("en-US")),
                     SessionId = sessionGuid
                 };
 
-                _dbContext.Add(order);
-                _dbContext.SaveChanges();
+                _uow.Orders.AddEntity(order);
+                _uow.Save();
             }
-        }
-
-        private T GetOrSaveModel<T>(T entity, Func<T, bool> func) where T : class
-        {
-            return _dbContext.Set<T>().FirstOrDefault(func) ??
-                _dbContext.Set<T>().Add(entity).Entity;
         }
 
         public void DataRollback(Guid sessionGuid)
         {
             lock (_locker)
             {
-                var entity = _dbContext.Set<Order>().Where(s => s.SessionId == sessionGuid);
-                _dbContext.RemoveRange(entity);
-                _dbContext.SaveChanges();
+                _uow.Orders.RemoveRange(sessionGuid);
+                _uow.Save();
             }
         }
     }

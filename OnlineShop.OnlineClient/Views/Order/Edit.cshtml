@@ -1,0 +1,29 @@
+﻿@model OnlineShop.BusinessLogic.Models.OrderModel
+@{
+    ViewData["Title"] = "Edit model";
+}
+
+<form asp-action="SaveOrder" asp-controller="Data">
+    <input type="hidden" asp-for="OrderId" />
+    <div class="form-group mb-3">
+        <label class="form-label" asp-for="Date">Date</label>
+        <input class="form-control" asp-for="Date" type="text" />
+    </div>
+    <div class="form-group mb-3">
+        <label class="form-label" asp-for="Manager">Manager</label>
+        <input class="form-control" asp-for="Manager" type="text" />
+    </div>
+    <div class="form-group mb-3">
+        <label class="form-label" asp-for="Client">Client</label>
+        <input class="form-control" asp-for="Client" type="text" />
+    </div>
+    <div class="form-group mb-3">
+        <label class="form-label" asp-for="Item">Item</label>
+        <input class="form-control" asp-for="Item" type="text" />
+    </div>
+    <div class="form-group mb-3">
+        <label class="form-label" asp-for="AmountOfMoney">Price</label>
+        <input class="form-control" asp-for="AmountOfMoney" type="text" />
+    </div>
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>

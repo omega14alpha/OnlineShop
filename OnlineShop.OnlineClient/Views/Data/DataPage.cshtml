@@ -6,21 +6,39 @@
     <div class="px-3 pt-2 min-vh-100">
         <ul class="nav nav-pills flex-column mb-auto" id="menuItems">
             <li class="nav-item">
-                <a class="nav-link text-white px-0" asp-action="Orders" asp-controller="Data">Orders</a>
+                <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Order">Orders</a>
             </li>
             <li>
-                <a class="nav-link text-white px-0" asp-action="Clients" asp-controller="Data">Clients</a>
+                <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Client">Clients</a>
             </li>
             <li>
-                <a class="nav-link text-white px-0" asp-action="Managers" asp-controller="Data">Managers</a>
+                <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Manager">Managers</a>
             </li>
             <li>
-                <a class="nav-link text-white px-0" asp-action="Items" asp-controller="Data">Items</a>
+                <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Item">Items</a>
             </li>
         </ul>
     </div>
 </div>
 
 <div class="col-md-9">
-    @*@await Html.PartialAsync("Orders")*@
+    <div id="dataDiv"></div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#menuItems a').click(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'post',
+                url: $(this).attr('href'),
+                success: function(data) {
+                    $('#dataDiv').html(data);
+                },
+                error: function(req, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

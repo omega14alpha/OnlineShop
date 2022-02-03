@@ -1,0 +1,60 @@
+﻿@model OnlineShop.OnlineClient.Pagination.Models.PaginationModel<OnlineShop.BusinessLogic.Models.ManagerModel>
+@using OnlineShop.OnlineClient.App_Code
+@{
+    ViewData["Title"] = "Managers list";
+}
+
+<div class="ml-5 mt-5">
+    <div>
+        <h3>Managers List</h3>
+        <table class="table table-bordered" id="table">
+            <thead>
+                <tr>
+                    <td>№</td>
+                    <td>Surname</td>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <td>Edit</td>
+                        <td>Delete</td>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var manager in Model.Items)
+                {
+                    <tr>
+                        <td>@manager.Id</td>
+                        <td>@manager.Surname</td>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <td><a asp-action="Edit" asp-controller="Manager" asp-route-id="@manager.ManagerId">Edit</a></td>
+                            <td><a asp-action="Delete" asp-controller="Manager" asp-route-id="@manager.ManagerId">Delete</a></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <div id="paginationBlock">
+            @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", "Manager", new {page = x}))
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+            $('#paginationBlock a').click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'post',
+                    url: $(this).attr('href'),
+                    success: function(data) {
+                        $('#dataDiv').html(data);
+                    },
+                    error: function(req, status, error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+</script>

@@ -4,6 +4,7 @@
 }
 
 <form asp-action="SaveOrder" asp-controller="Data">
+    <input type="hidden" asp-for="OrderId" />
     <div class="form-group mb-3">
         <label class="form-label" asp-for="Date">Date</label>
         <input class="form-control" asp-for="Date" type="text" />

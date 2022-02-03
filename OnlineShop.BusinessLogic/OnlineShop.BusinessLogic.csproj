@@ -9,4 +9,12 @@
     <ProjectReference Include="..\OnlineShop.OrderArchiver\OnlineShop.OrderArchiver.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.0" />
+  </ItemGroup>
+
 </Project>

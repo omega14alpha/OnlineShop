@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OnlineShop.DataAccess;
 using OnlineShop.DataAccess.Contexts;
 using OnlineShop.OnlineClient.Identity;
 using OnlineShop.OnlineClient.Identity.Models;
@@ -41,14 +42,15 @@ namespace OnlineShop.OnlineClient
             Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                    webBuilder.UseStartup<Startup>();
+                webBuilder.UseStartup<Startup>();
             })
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton(options =>
                 {
                     var connectionStrong = context.Configuration["AppConfig:ConnectionStrings:OnlineShopConnectionString"];
-                    return new DbContextOptionsBuilder<DbOrderContext>().UseSqlServer(connectionStrong).Options;
+                    var dbOptions = new DbContextOptionsBuilder<DbOrderContext>().UseSqlServer(connectionStrong).Options;
+                    return new DataBaseUoW(new DbOrderContext(dbOptions));
                 }).AddHostedService<Worker>();
                 services.Configure<FoldersInfoModel>(context.Configuration.GetSection("AppConfig:Folders"));
             });

@@ -1,11 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using OnlineShop.BusinessLogic.Interfaces;
-using OnlineShop.BusinessLogic.Models;
-using OnlineShop.OnlineClient.Pagination.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace OnlineShop.OnlineClient.Controllers
 {
@@ -13,92 +7,17 @@ namespace OnlineShop.OnlineClient.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private readonly IDbWorker _worker;
-
-        private const int PageSize = 10;
-
-        public DataController(ILogger<HomeController> logger, IDbWorker worker)
+        public DataController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _worker = worker;
         }
 
         public IActionResult DataPage()
         {
+            var qwe = User.IsInRole("admin");
+            var zxc = User.IsInRole("user");
+
             return View();
-        }
-
-        [Authorize(Roles = "user, admin")]
-        public IActionResult Orders(int page = 1)
-        {
-            var orders = _worker.GetOrders(page, PageSize, out int count);
-            var viewModel = CreatePagination(orders, page, count);
-            return View(viewModel);
-        }
-
-        [Authorize(Roles = "admin")]
-        public IActionResult Clients(int page = 1)
-        {
-            var clients = _worker.GetClients(page, PageSize, out int count);
-            var viewModel = CreatePagination(clients, page, count);
-            return View(viewModel);
-        }
-
-        //  [Authorize(Roles = "user, admin")]
-        public IActionResult Items(int page = 1)
-        {
-            var items = _worker.GetItems(page, PageSize, out int count);
-            var viewModel = CreatePagination(items, page, count);
-            return View(viewModel);
-        }
-
-        //  [Authorize(Roles = "user, admin")]
-        public IActionResult Managers(int page = 1)
-        {
-            var managers = _worker.GetManagers(page, PageSize, out int count);
-            var viewModel = CreatePagination(managers, page, count);
-            return View(viewModel);
-        }
-
-        public async Task<IActionResult> EditOrder(int? id)
-        {
-            if (id != null)
-            {
-                var order = await _worker.GetOrderAsync(id);
-                if (order != null)
-                {
-                    return View(order);
-                }
-            }
-
-            return RedirectToAction("Orders");
-        }
-
-        [HttpPost]
-        public IActionResult SaveOrder(OrderModel model)
-        {
-
-            return RedirectToAction("Orders");
-        }
-
-        public IActionResult DeleteOrder(OrderModel model)
-        {
-
-            return View("Orders");
-        }
-
-        private PaginationModel<T> CreatePagination<T>(IEnumerable<T> collection, int page, int count)
-        {
-            return new PaginationModel<T>()
-            {
-                Items = collection,
-                PageInfo = new PageInfoModel()
-                {
-                    PageNumber = page,
-                    PageSize = PageSize,
-                    TotalItems = count
-                }
-            };
         }
     }
 }
