@@ -2,6 +2,10 @@
     ViewData["Title"] = "Data form";
 }
 
+@section Scripts{
+    <script src="~/js/tableFilingScript.js"></script>
+}
+
 <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
     <div class="px-3 pt-2 min-vh-100">
         <ul class="nav nav-pills flex-column mb-auto" id="menuItems">
@@ -24,21 +28,3 @@
 <div class="col-md-9">
     <div id="dataDiv"></div>
 </div>
-
-<script>
-    $(document).ready(function() {
-        $('#menuItems a').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'post',
-                url: $(this).attr('href'),
-                success: function(data) {
-                    $('#dataDiv').html(data);
-                },
-                error: function(req, status, error) {
-                    console.log(error);
-                }
-            });
-        });
-    });
-</script>

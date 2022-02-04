@@ -33,7 +33,12 @@ namespace OnlineShop.BusinessLogic
         public ItemModel GetModel(int displayedId, int modelId)
         {
             var item = _dbUoW.Items.GetEntityByCondition(o => o.Id == modelId);
-            return EntityToModel(item, displayedId);
+            if (item != null)
+            {
+                return EntityToModel(item, displayedId);
+            }
+
+            return null;
         }
 
         public void EditModel(ItemModel model)

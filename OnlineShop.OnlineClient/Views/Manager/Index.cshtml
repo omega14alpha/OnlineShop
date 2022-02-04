@@ -41,20 +41,3 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-            $('#paginationBlock a').click(function(e) {
-                e.preventDefault();
-                $.ajax({
-                    type: 'post',
-                    url: $(this).attr('href'),
-                    success: function(data) {
-                        $('#dataDiv').html(data);
-                    },
-                    error: function(req, status, error) {
-                        console.log(error);
-                    }
-                });
-            });
-        });
-</script>
