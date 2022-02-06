@@ -2,12 +2,10 @@
     ViewData["Title"] = "Data form";
 }
 
-@section Scripts{
-    <script src="~/js/tableFilingScript.js"></script>
-}
+<script src="~/js/tableFilingScript.js"></script>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
-    <div class="px-3 pt-2 min-vh-100">
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark h-100">
+    <div class="px-3 pt-2">
         <ul class="nav nav-pills flex-column mb-auto" id="menuItems">
             <li class="nav-item">
                 <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Order">Orders</a>
@@ -25,6 +23,7 @@
     </div>
 </div>
 
-<div class="col-md-9">
-    <div id="dataDiv"></div>
+<div class="col-md-9" id="insertDiv">
+    <div id="filtrationDiv"></div>
+    <div id="dataDiv" class="pb-5"></div>
 </div>

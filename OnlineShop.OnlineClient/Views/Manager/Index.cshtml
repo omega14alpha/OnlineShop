@@ -20,23 +20,29 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var manager in Model.Items)
+                @if (Model != null)
                 {
-                    <tr>
-                        <td>@manager.Id</td>
-                        <td>@manager.Surname</td>
-                        @if (User.IsInRole("admin"))
-                        {
-                            <td><a asp-action="Edit" asp-controller="Manager" asp-route-id="@manager.ManagerId">Edit</a></td>
-                            <td><a asp-action="Delete" asp-controller="Manager" asp-route-id="@manager.ManagerId">Delete</a></td>
-                        }
-                    </tr>
+                    @foreach (var manager in Model.Items)
+                    {
+                        <tr>
+                            <td>@manager.Id</td>
+                            <td>@manager.Surname</td>
+                            @if (User.IsInRole("admin"))
+                            {
+                                <td><a asp-action="Edit" asp-controller="Manager" asp-route-id="@manager.ManagerId">Edit</a></td>
+                                <td><a asp-action="Delete" asp-controller="Manager" asp-route-id="@manager.ManagerId">Delete</a></td>
+                            }
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
         <br />
         <div id="paginationBlock">
-            @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", "Manager", new {page = x}))
+            @if (Model != null)
+            {
+                @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", "Manager", new {page = x}))
+            }
         </div>
     </div>
 </div>

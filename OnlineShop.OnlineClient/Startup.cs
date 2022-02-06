@@ -10,11 +10,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using OnlineShop.OnlineClient.Identity.Contexts;
 using OnlineShop.OnlineClient.Identity.Models;
-using OnlineShop.DataAccess.Interfaces;
-using OnlineShop.DataAccess.Repositories;
-using OnlineShop.DataAccess.Entities;
 using OnlineShop.BusinessLogic.Models;
 using OnlineShop.DataAccess;
+using Microsoft.Extensions.Logging;
+using OnlineShop.OnlineClient.Infrastructure.Logger;
 
 namespace OnlineShop.OnlineClient
 {
@@ -29,9 +28,7 @@ namespace OnlineShop.OnlineClient
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {
-            //  services.AddScoped(typeof(IRepository<Order>), typeof(DbRepository<Order>));
-                        
+        {                       
             services.AddDbContext<DbOrderContext>().AddDbContext<DbIdentityContext>((serviceProvider, options) =>
             {
                 options.UseSqlServer(_configuration["AppConfig:ConnectionStrings:OnlineShopConnectionString"]);
@@ -52,12 +49,15 @@ namespace OnlineShop.OnlineClient
             services.AddControllersWithViews();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            var filePath = _configuration["LoggerFilePaths:OnlineClientFilePath"];
+            loggerFactory.AddFile(filePath);
 
             app.UseStaticFiles();
             app.UseRouting();

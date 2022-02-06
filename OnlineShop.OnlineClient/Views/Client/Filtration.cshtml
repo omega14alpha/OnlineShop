@@ -1,0 +1,25 @@
+﻿<script src="~/js/search.js"></script>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-auto">
+            <div class="input-group">
+                <div class="input-group-btn search-panel">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span id="search_concept">Filter by</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="">
+                        <li><a class="dropdown-item" asp-action="Search" asp-controller="Client">Name</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-7">
+            <div class="input-group">
+                <input type="hidden" id="search_param" />
+                <input class="form-control" id="fill_box" type="text" placeholder="Search term..." disabled />
+            </div>
+        </div>
+    </div>
+</div>

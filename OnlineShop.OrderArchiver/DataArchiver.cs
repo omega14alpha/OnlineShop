@@ -21,10 +21,15 @@ namespace OnlineShop.OrderArchiver
             _orderWorker = orderWorker;
             _fileInfoCreator = fileInfoCreator;
             _fileWorker = fileWorker;
+        }
+
+        public void StartWork()
+        {
+            CheckObservedFolder();
             _fileWorker.OnNewFileDetected += FileDetected;
         }
 
-        public void CheckObservedFolder()
+        private void CheckObservedFolder()
         {
             var files = _fileWorker.GetFilesPath();
             foreach (var file in files)

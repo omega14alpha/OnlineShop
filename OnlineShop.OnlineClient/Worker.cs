@@ -6,6 +6,7 @@ using OnlineShop.OrderArchiver;
 using OnlineShop.OrderArchiver.Infrastructure;
 using OnlineShop.OrderArchiver.Interfaces;
 using OnlineShop.OrderArchiver.Models;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,18 +22,35 @@ namespace OnlineShop.OnlineClient
 
         public Worker(ILogger<Worker> logger, IOptions<FoldersInfoModel> appOptions, DataBaseUoW uow)
         {
+            _logger = logger;
             _dataArchiver = CreateArchiver(appOptions.Value, uow);
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _dataArchiver?.CheckObservedFolder();
+            try
+            {
+                _dataArchiver?.StartWork();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+
             return Task.CompletedTask;
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _dataArchiver?.Dispose();
+            try
+            {
+                _dataArchiver?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+
             return Task.CompletedTask;
         }
 

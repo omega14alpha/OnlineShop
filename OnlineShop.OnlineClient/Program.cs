@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OnlineShop.DataAccess;
 using OnlineShop.DataAccess.Contexts;
+using OnlineShop.OnlineClient.Infrastructure.Logger;
 using OnlineShop.OnlineClient.Identity;
 using OnlineShop.OnlineClient.Identity.Models;
 using OnlineShop.OrderArchiver.Models;
@@ -43,6 +44,11 @@ namespace OnlineShop.OnlineClient
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
+            })
+            .ConfigureLogging((context, loggerFactory) =>
+            {
+                var filePath = context.Configuration["LoggerFilePaths:ArchiverLogerFilePath"];
+                loggerFactory.AddFile(filePath);
             })
             .ConfigureServices((context, services) =>
             {

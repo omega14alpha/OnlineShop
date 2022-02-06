@@ -1,0 +1,5 @@
+Application startup exception
+Application startup exception
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: G:\EPAM Lessons\ASP\OnlineShop\OnlineShop.OnlineClient

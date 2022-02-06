@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/orderShopStyle.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </head>
 <body>
     <header>
@@ -32,14 +36,16 @@
             }
         </nav>
     </header>
-    <div class="container body-content row">
-        @RenderBody()
-        <footer class="text-center text-white fixed-bottom bg-dark">
-            <hr class="footerDivider" />
-            <div class="container"></div>
-            <div class="text-left text-white pb-3 pl-5">© 2022 Online Shop</div>
-        </footer>
-    </div>
-        @RenderSection("Scripts", required: false)
+    <main>
+        <div class="container body-content row">
+            @RenderBody()
+        </div>
+    </main>
+    <footer class="text-center text-white bg-dark">
+        <hr class="footerDivider" />
+        <div class="container"></div>
+        <div class="text-left text-white pb-3 pl-5">© 2022 Online Shop</div>
+    </footer>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

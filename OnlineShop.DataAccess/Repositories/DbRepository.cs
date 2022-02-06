@@ -30,6 +30,9 @@ namespace OnlineShop.DataAccess.Repositories
         public IEnumerable<TEntity> GetRangeWithOrder<EType>(int startNumber, int count, Func<TEntity, EType> condition) =>
             _context.Set<TEntity>().OrderBy(condition).Skip(startNumber).Take(count);
 
+        public IEnumerable<TEntity> GetRangeByCondition(int startNumber, int count, Func<TEntity, bool> condition) =>
+            _context.Set<TEntity>().Where(condition).Skip(startNumber).Take(count);
+
         public void AddEntity(TEntity entity) => _context.Set<TEntity>().Add(entity);
 
         public void Remove(int id)

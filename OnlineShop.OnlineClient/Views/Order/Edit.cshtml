@@ -1,12 +1,9 @@
 ﻿@model OnlineShop.BusinessLogic.Models.OrderModel
-@{
-    ViewData["Title"] = "Edit model";
-}
 
 <div class="m-5">
     <h3>Order editing</h3>
     <div class="ml-5 mt-5">
-        <form asp-action="Save" asp-controller="Order">
+        <form asp-action="Save" asp-controller="Order" method="post">
             <input type="hidden" asp-for="OrderId" />
             <div class="row g-3 align-items-center mb-4">
                 <div class="col-sm-3">

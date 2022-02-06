@@ -11,6 +11,8 @@ namespace OnlineShop.DataAccess.Interfaces
 
         IEnumerable<TEntity> GetRangeWithOrder<EType>(int startNumber, int count, Func<TEntity, EType> condition);
 
+        IEnumerable<TEntity> GetRangeByCondition(int startNumber, int count, Func<TEntity, bool> condition);
+
         TEntity GetEntityByCondition(Func<TEntity, bool> condition);
 
         TEntity GetOrAddEntity(TEntity entity, Func<TEntity, bool> condition);

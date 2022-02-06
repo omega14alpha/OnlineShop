@@ -53,6 +53,21 @@ namespace OnlineShop.BusinessLogic
             _dbUoW.Items.Remove(id);
         }
 
+        public IEnumerable<ItemModel> Filtration(int pageNumber, int totalSize, out int comonEntityCount, FilterDataModel filterModel)
+        {
+            comonEntityCount = _dbUoW.Managers.GetCount();
+            var itemModels = new List<ItemModel>();
+            var items = _dbUoW.Items.GetRangeByCondition((pageNumber - 1) * totalSize, totalSize, s => s.Name.StartsWith(filterModel.Data));
+            var displayedId = (pageNumber - 1) * totalSize + 1;
+            foreach (var item in items)
+            {
+                itemModels.Add(EntityToModel(item, displayedId));
+                displayedId++;
+            }
+
+            return itemModels;
+        }
+
         private ItemModel EntityToModel(Item item, int displayedId)
         {
             return new ItemModel()

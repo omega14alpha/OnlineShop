@@ -14,9 +14,6 @@ namespace OnlineShop.OnlineClient.Controllers
 
         public IActionResult DataPage()
         {
-            var qwe = User.IsInRole("admin");
-            var zxc = User.IsInRole("user");
-
             return View();
         }
     }

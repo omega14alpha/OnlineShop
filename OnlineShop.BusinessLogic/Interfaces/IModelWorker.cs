@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OnlineShop.BusinessLogic.Models;
+using System.Collections.Generic;
 
 namespace OnlineShop.BusinessLogic.Interfaces
 {
@@ -11,5 +12,7 @@ namespace OnlineShop.BusinessLogic.Interfaces
         void EditModel(TModel model);
 
         void DeleteModel(int id);
+
+        IEnumerable<TModel> Filtration(int pageNumber, int totalSize, out int comonEntityCount, FilterDataModel filterModel);
     }
 }
