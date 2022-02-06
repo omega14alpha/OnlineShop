@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnlineShop.BusinessLogic.Interfaces;
 using OnlineShop.BusinessLogic.Models;
-using OnlineShop.OnlineClient.Pagination.Models;
+using OnlineShop.OnlineClient.Infrastructure.Pagination;
 using System.Collections.Generic;
 
 namespace OnlineShop.OnlineClient.Controllers

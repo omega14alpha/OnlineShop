@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OnlineShop.OnlineClient.Pagination.Models
+namespace OnlineShop.OnlineClient.Infrastructure.Pagination
 {
     public class PaginationModel<T>
     {

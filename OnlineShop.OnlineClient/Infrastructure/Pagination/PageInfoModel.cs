@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OnlineShop.OnlineClient.Pagination.Models
+namespace OnlineShop.OnlineClient.Infrastructure.Pagination
 {
     public class PageInfoModel
     {

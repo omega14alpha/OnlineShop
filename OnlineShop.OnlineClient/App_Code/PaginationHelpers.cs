@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using OnlineShop.OnlineClient.Pagination.Models;
+using OnlineShop.OnlineClient.Infrastructure.Pagination;
 using System;
 using System.IO;
 using System.Text.Encodings.Web;
