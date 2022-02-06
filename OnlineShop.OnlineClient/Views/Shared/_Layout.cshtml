@@ -27,8 +27,21 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-                <a class="btn btn-light btn-success ml-auto mr-1" asp-action="Logout" asp-controller="Account">Logout</a>
-                <a class="btn btn-light btn-success mr-1" asp-action="ChangePassword" asp-controller="Account">Change password</a>
+                <div class="ml-auto mr-1">
+                    <div class="input-group">
+                        <div class="input-group-btn search-panel">
+                            <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/user.png"/>
+                                @User.Identity.Name
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-action="ChangePassword" asp-controller="Account">Change password</a></li>
+                                <li><div class="dropdown-divider"></div></li>
+                                <li><a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             }
             else
             {
