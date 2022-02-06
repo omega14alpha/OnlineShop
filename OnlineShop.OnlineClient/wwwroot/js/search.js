@@ -1,5 +1,4 @@
 ﻿var flag = true;
-var pattern = /^[0-9a-zA-Z]+$/;
 
 $(document).ready(function () {
     interceptDropdown('#filtrationDiv .search-panel .dropdown-menu');

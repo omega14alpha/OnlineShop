@@ -40,6 +40,7 @@ namespace OnlineShop.OnlineClient
             services.AddScoped<IModelWorker<ManagerModel>>(provider => new ManagerWorker(provider.GetRequiredService<DataBaseUoW>()));
             services.AddScoped<IModelWorker<ClientModel>>(provider => new ClientWorker(provider.GetRequiredService<DataBaseUoW>()));
             services.AddScoped<IModelWorker<ItemModel>>(provider => new ItemWorker(provider.GetRequiredService<DataBaseUoW>()));
+            services.AddScoped(provider => new ChartWorker(provider.GetRequiredService<DataBaseUoW>()));
 
             services.AddIdentity<UserModel, IdentityRole>(options =>
             {

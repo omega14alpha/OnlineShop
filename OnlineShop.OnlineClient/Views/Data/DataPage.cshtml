@@ -2,29 +2,39 @@
     ViewData["Title"] = "Data form";
 }
 
-<script src="~/js/tableFilingScript.js"></script>
-
 <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark h-100">
-    <div class="px-3 pt-2">
-        <ul class="nav nav-pills flex-column mb-auto" id="menuItems">
-            <li class="nav-item">
-                <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Order">Orders</a>
-            </li>
-            <li>
-                <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Client">Clients</a>
-            </li>
-            <li>
-                <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Manager">Managers</a>
-            </li>
-            <li>
-                <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Item">Items</a>
-            </li>
-        </ul>
+    <div class="pt-2">
+        <h7 class="nav-link text-white px-0">Tables</h7>
+        <div class="px-3">
+            <ul class="nav nav-pills flex-column mb-auto" id="menuItems">
+                <li class="nav-item">
+                    <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Order">Orders</a>
+                </li>
+                <li>
+                    <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Client">Clients</a>
+                </li>
+                <li>
+                    <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Manager">Managers</a>
+                </li>
+                <li>
+                    <a class="nav-link text-white px-0" asp-action="Index" asp-controller="Item">Items</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pt-2">
+        <h7 class="nav-link text-white px-0">Charts</h7>
+        <div class="px-3">
+            <ul class="nav nav-pills flex-column mb-auto" id="charItems">
+                <li class="nav-item">
+                    <a class="nav-link text-white px-0" asp-action="Sales" asp-controller="Chart">Sales managers</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 
-<div class="col-md-9" id="insertDiv">
-    <div id="filtrationDiv"></div>
-    <div id="dataDiv" class="pb-5"></div>
-    <a asp-action="Chart" asp-controller="Order">Show Chart</a>
-</div>
+<div class="col-md-9" id="insertDiv"></div>
+
+<script src="~/js/tableChoise.js"></script>
+<script src="~/js/chartsFiling.js"></script>

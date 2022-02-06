@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using OnlineShop.BusinessLogic.Interfaces;
 using OnlineShop.BusinessLogic.Models;
 using OnlineShop.OnlineClient.Infrastructure.Pagination;
+using System;
 using System.Collections.Generic;
 
 namespace OnlineShop.OnlineClient.Controllers
@@ -24,10 +25,19 @@ namespace OnlineShop.OnlineClient.Controllers
 
         [HttpPost]
         [Authorize(Roles = "user, admin")]
-        public IActionResult Index(int page = 1)
+        public PartialViewResult Index(int page = 1)
         {
-            var orders = _modelWorker.GetModels(page, PageSize, out int count);
-            var viewModel = CreatePagination(orders, page, count);
+            PaginationModel<TModel> viewModel = null;
+            try
+            {
+                var models = _modelWorker.GetModels(page, PageSize, out int count);
+                viewModel = CreatePagination(models, page, count);                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+
             return PartialView(viewModel);
         }
 
@@ -52,8 +62,17 @@ namespace OnlineShop.OnlineClient.Controllers
                 return PartialView("Index");
             }
 
-            var items = _modelWorker.Filtration(1, PageSize, out int count, filterModel);
-            var viewModel = CreatePagination(items, 1, count);
+            PaginationModel<TModel> viewModel = null;
+            try
+            {
+                var models = _modelWorker.Filtration(1, PageSize, out int count, filterModel);
+                viewModel = CreatePagination(models, 1, count);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+
             return PartialView("Index", viewModel);
         }
 
@@ -61,10 +80,13 @@ namespace OnlineShop.OnlineClient.Controllers
         [Authorize(Roles = "admin")]
         public PartialViewResult Edit(int id)
         {
-            var order = _modelWorker.GetModel(1, id);
-            if (order != null)
+            try
             {
-                return PartialView(order);
+                return PartialView(_modelWorker.GetModel(1, id));                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
             }
             
             return PartialView("Index");
@@ -72,22 +94,40 @@ namespace OnlineShop.OnlineClient.Controllers
 
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public IActionResult Save(TModel model)
+        public PartialViewResult Save(TModel model)
         {
             if (model != null)
             {
-                _modelWorker.EditModel(model);
+                try
+                {
+                    _modelWorker.EditModel(model);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogInformation(ex.Message);
+                }                
             }
 
-            return PartialView("Index");
+            return Index();
         }
 
         [HttpGet]
         [Authorize(Roles = "admin")]
         public IActionResult Delete(int id)
         {
-            _modelWorker.DeleteModel(id);
-            return View("Index");
+            if (id >= 0)
+            {
+                try
+                {
+                    _modelWorker.DeleteModel(id);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogInformation(ex.Message);
+                }
+            }
+
+            return Index();
         }
 
         private PaginationModel<TModel> CreatePagination(IEnumerable<TModel> collection, int page, int count)

@@ -1,0 +1,63 @@
+﻿@model List<OnlineShop.BusinessLogic.Models.Chart.ChartDataUnitModel>
+@{
+    var XLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.DimensionOne));
+    var YValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Quantity));
+}
+
+<div class="box-body pt-5 pl-5">
+    <div class="chart-container">
+        <canvas id="chart" style="width:100%; height:500px;"></canvas>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var chartName = "chart";
+        var ctx = document.getElementById(chartName).getContext('2d');
+        var data = {
+            labels: @Html.Raw(XLabels),
+            datasets: [{
+                label: "Sales managers",
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1,
+                data: @Html.Raw(YValues)
+            }]
+        };
+
+        var options = {
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: true,
+                        color: "rgba(255, 99, 164, 0.2)"
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }]
+            }
+        };
+
+        var myChar = new Chart(ctx, {
+            options: options,
+            data: data,
+            type: 'bar'
+        });
+    });
+</script>

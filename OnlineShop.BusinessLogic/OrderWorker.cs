@@ -50,6 +50,7 @@ namespace OnlineShop.BusinessLogic
         public void DeleteModel(int id)
         {
             _dbUoW.Orders.Remove(id);
+            _dbUoW.Save();
         }
 
         public IEnumerable<OrderModel> Filtration(int pageNumber, int totalSize, out int comonEntityCount, FilterDataModel filterModel)

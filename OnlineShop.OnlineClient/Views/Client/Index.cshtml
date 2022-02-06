@@ -1,8 +1,5 @@
 ﻿@model OnlineShop.OnlineClient.Infrastructure.Pagination.PaginationModel<OnlineShop.BusinessLogic.Models.ClientModel>
 @using OnlineShop.OnlineClient.App_Code
-@{
-    ViewData["Title"] = "Clients list";
-}
 
 <div class="ml-5 mt-5">
     <div>
@@ -29,8 +26,8 @@
                             <td>@client.Name</td>
                             @if (User.IsInRole("admin"))
                             {
-                                <td><a asp-action="Edit" asp-controller="Client" asp-route-id="@client.ClientId">Edit</a></td>
-                                <td><a asp-action="Delete" asp-controller="Client" asp-route-id="@client.ClientId">Delete</a></td>
+                                <td><a asp-action="Edit" asp-controller="Client" asp-route-id="@client.ClientId" id="editOption">Edit</a></td>
+                                <td><a asp-action="Delete" asp-controller="Client" asp-route-id="@client.ClientId" id="deleteOption">Delete</a></td>
                             }
                         </tr>
                     }

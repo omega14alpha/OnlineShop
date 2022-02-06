@@ -18,11 +18,16 @@ namespace OnlineShop.DataAccess
 
         private IRepository<Item> _itemRepository;
 
+        private ForChartRepository _chartRepository;
+
         private bool _disposed;
 
         public DataBaseUoW(DbOrderContext dbContext)
         {
             _dbContext = dbContext;
+
+            ForChartRepository repository = new ForChartRepository(dbContext);
+            repository.GetManagersData();
         }
 
         public IRepository<Order> Orders => _orderRepository ?? new DbRepository<Order>(_dbContext);
@@ -33,9 +38,9 @@ namespace OnlineShop.DataAccess
 
         public IRepository<Item> Items => _itemRepository ?? new DbRepository<Item>(_dbContext);
 
+        public ForChartRepository ChartRepository => _chartRepository ?? new ForChartRepository(_dbContext);
+
         public void Save() => _dbContext.SaveChanges();
-
-
 
         public virtual void Dispose(bool disposing)
         {

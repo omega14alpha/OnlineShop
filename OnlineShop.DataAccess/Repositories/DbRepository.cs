@@ -8,7 +8,7 @@ namespace OnlineShop.DataAccess.Repositories
 {
     public class DbRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private DbOrderContext _context;
+        private readonly DbOrderContext _context;
 
         public DbRepository(DbOrderContext context)
         {
@@ -19,7 +19,7 @@ namespace OnlineShop.DataAccess.Repositories
             _context.Set<TEntity>().Count();
 
         public TEntity GetEntityByCondition(Func<TEntity, bool> condition) =>
-            _context.Set<TEntity>().FirstOrDefault(condition);
+            _context.Set<TEntity>()?.First(condition);
 
         public TEntity GetOrAddEntity(TEntity entity, Func<TEntity, bool> condition) => 
             _context.Set<TEntity>().FirstOrDefault(condition) ?? _context.Set<TEntity>().Add(entity).Entity;
