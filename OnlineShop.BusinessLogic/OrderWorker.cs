@@ -83,7 +83,7 @@ namespace OnlineShop.BusinessLogic
             {
                 var entityId = _dbUoW.Clients.GetEntityByCondition(s => s.Name.StartsWith(filterModel.Data)).Id;
                 comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ClientId == entityId);
-                return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.Client.Name.StartsWith(filterModel.Data));
+                return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.ClientId == entityId);
             }
             else if (filterModel.Field == "Item")
             {
