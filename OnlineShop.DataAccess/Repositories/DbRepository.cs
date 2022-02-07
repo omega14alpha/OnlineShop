@@ -18,6 +18,9 @@ namespace OnlineShop.DataAccess.Repositories
         public int GetCount() => 
             _context.Set<TEntity>().Count();
 
+        public int GetCountByCondition(Func<TEntity, bool> condition) =>
+            _context.Set<TEntity>().Where(condition).Count();
+
         public TEntity GetEntityByCondition(Func<TEntity, bool> condition) =>
             _context.Set<TEntity>()?.First(condition);
 
@@ -31,7 +34,7 @@ namespace OnlineShop.DataAccess.Repositories
             _context.Set<TEntity>().OrderBy(condition).Skip(startNumber).Take(count);
 
         public IEnumerable<TEntity> GetRangeByCondition(int startNumber, int count, Func<TEntity, bool> condition) =>
-            _context.Set<TEntity>().Where(condition).Skip(startNumber).Take(count);
+            _context.Set<TEntity>().Where(condition).Skip(startNumber).Take(count).ToList();
 
         public void AddEntity(TEntity entity) => _context.Set<TEntity>().Add(entity);
 

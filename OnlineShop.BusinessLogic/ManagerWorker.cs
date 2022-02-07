@@ -51,9 +51,9 @@ namespace OnlineShop.BusinessLogic
 
         public IEnumerable<ManagerModel> Filtration(int pageNumber, int totalSize, out int comonEntityCount, FilterDataModel filterModel)
         {
-            comonEntityCount = _dbUoW.Managers.GetCount();
-            var managerModels = new List<ManagerModel>();
+            comonEntityCount = _dbUoW.Managers.GetCountByCondition(s => s.Surname.StartsWith(filterModel.Data));
             var managers = _dbUoW.Managers.GetRangeByCondition((pageNumber - 1) * totalSize, totalSize, s => s.Surname.StartsWith(filterModel.Data));
+            var managerModels = new List<ManagerModel>();
             var displayedId = (pageNumber - 1) * totalSize + 1;
             foreach (var manager in managers)
             {

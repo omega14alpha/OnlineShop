@@ -56,7 +56,7 @@ namespace OnlineShop.BusinessLogic
 
         public IEnumerable<ItemModel> Filtration(int pageNumber, int totalSize, out int comonEntityCount, FilterDataModel filterModel)
         {
-            comonEntityCount = _dbUoW.Managers.GetCount();
+            comonEntityCount = _dbUoW.Items.GetCountByCondition(s => s.Name.StartsWith(filterModel.Data));
             var itemModels = new List<ItemModel>();
             var items = _dbUoW.Items.GetRangeByCondition((pageNumber - 1) * totalSize, totalSize, s => s.Name.StartsWith(filterModel.Data));
             var displayedId = (pageNumber - 1) * totalSize + 1;

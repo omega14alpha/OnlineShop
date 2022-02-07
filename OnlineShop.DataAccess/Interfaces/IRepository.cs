@@ -7,6 +7,8 @@ namespace OnlineShop.DataAccess.Interfaces
     {
         int GetCount();
 
+        int GetCountByCondition(Func<TEntity, bool> condition);
+
         IEnumerable<TEntity> GetRange(int startNumber, int count);
 
         IEnumerable<TEntity> GetRangeWithOrder<EType>(int startNumber, int count, Func<TEntity, EType> condition);

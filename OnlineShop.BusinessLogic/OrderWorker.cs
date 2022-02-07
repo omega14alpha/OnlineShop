@@ -54,18 +54,54 @@ namespace OnlineShop.BusinessLogic
         }
 
         public IEnumerable<OrderModel> Filtration(int pageNumber, int totalSize, out int comonEntityCount, FilterDataModel filterModel)
-        {            
-            comonEntityCount = _dbUoW.Orders.GetCount();
+        {           
+
             var orderModels = new List<OrderModel>();
-           /* var orders = _dbUoW.Orders.GetRangeByCondition((pageNumber - 1) * totalSize, totalSize, s => s.Name.StartsWith(filterModel.Data));
-            var displayedId = (pageNumber - 1) * totalSize + 1;
-            foreach (var order in orders)
+            var orders = GetPerception((pageNumber - 1) * totalSize, totalSize, out comonEntityCount, filterModel);
+            if (orders != null)
             {
-                orderModels.Add(EntityToModel(order, displayedId));
-                displayedId++;
-            }*/
+                var displayedId = (pageNumber - 1) * totalSize + 1;
+                foreach (var order in orders)
+                {
+                    orderModels.Add(EntityToModel(order, displayedId));
+                    displayedId++;
+                }
+            }
 
             return orderModels;
+        }
+
+        private IEnumerable<Order> GetPerception(int startNumber, int count, out int comonEntityCount, FilterDataModel filterModel)
+        {
+            if (filterModel.Field == "Manager")
+            {
+                var entityId = _dbUoW.Managers.GetEntityByCondition(s => s.Surname.StartsWith(filterModel.Data)).Id;
+                comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ManagerId == entityId);
+                return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.ManagerId == entityId);
+            }
+            else if (filterModel.Field == "Client")
+            {
+                var entityId = _dbUoW.Clients.GetEntityByCondition(s => s.Name.StartsWith(filterModel.Data)).Id;
+                comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ClientId == entityId);
+                return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.Client.Name.StartsWith(filterModel.Data));
+            }
+            else if (filterModel.Field == "Item")
+            {
+                var entityId = _dbUoW.Clients.GetEntityByCondition(s => s.Name.StartsWith(filterModel.Data)).Id;
+                comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ItemId == entityId);
+                return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.ItemId == entityId);
+            }
+            else if (filterModel.Field == "AmountOfMoney")
+            {
+                if (double.TryParse(filterModel.Data, out var number))
+                {
+                    comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.AmountOfMoney == number);
+                    return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.AmountOfMoney == number);
+                }
+            }
+
+            comonEntityCount = 0;
+            return null;
         }
 
         private OrderModel EntityToModel(Order order, int displayedId)
