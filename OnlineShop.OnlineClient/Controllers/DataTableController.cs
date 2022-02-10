@@ -11,11 +11,11 @@ namespace OnlineShop.OnlineClient.Controllers
 {
     public abstract class DataTableController<TModel> : Controller
     {
-        private const int PageSize = 10;
+        protected const int PageSize = 10;
 
-        private readonly ILogger _logger;
+        protected readonly ILogger _logger;
 
-        private readonly IModelWorker<TModel> _modelWorker;
+        protected readonly IModelWorker<TModel> _modelWorker;
 
         public DataTableController(ILogger logger, IModelWorker<TModel> modelWorker)
         {
@@ -57,7 +57,7 @@ namespace OnlineShop.OnlineClient.Controllers
                 return RedirectToAction("Index");
             }
 
-            if (string.IsNullOrWhiteSpace(filterModel.Data))
+            if (string.IsNullOrWhiteSpace(filterModel.Data) && filterModel.Dates == null)
             {
                 return PartialView("Index");
             }
@@ -130,7 +130,7 @@ namespace OnlineShop.OnlineClient.Controllers
             return Index();
         }
 
-        private PaginationModel<TModel> CreatePagination(IEnumerable<TModel> collection, int page, int count)
+        protected PaginationModel<TModel> CreatePagination(IEnumerable<TModel> collection, int page, int count)
         {
             return new PaginationModel<TModel>()
             {

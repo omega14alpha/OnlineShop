@@ -27,6 +27,8 @@ namespace OnlineShop.DataAccess.Repositories
         public TEntity GetOrAddEntity(TEntity entity, Func<TEntity, bool> condition) => 
             _context.Set<TEntity>().FirstOrDefault(condition) ?? _context.Set<TEntity>().Add(entity).Entity;
 
+        public IEnumerable<TEntity> GetEntities() => _context.Set<TEntity>().ToList();
+
         public IEnumerable<TEntity> GetRange(int startNumber, int count) =>
             _context.Set<TEntity>().Skip(startNumber).Take(count);
 
@@ -35,6 +37,9 @@ namespace OnlineShop.DataAccess.Repositories
 
         public IEnumerable<TEntity> GetRangeByCondition(int startNumber, int count, Func<TEntity, bool> condition) =>
             _context.Set<TEntity>().Where(condition).Skip(startNumber).Take(count).ToList();
+
+        public IEnumerable<TEntity> GetRangeByConditionWithOrder<EType>(int startNumber, int count, Func<TEntity, bool> condition, Func<TEntity, EType> orderCondition) =>
+            _context.Set<TEntity>().Where(condition).OrderBy(orderCondition).Skip(startNumber).Take(count).ToList();
 
         public void AddEntity(TEntity entity) => _context.Set<TEntity>().Add(entity);
 

@@ -102,7 +102,6 @@ function saveRecord() {
             url: $(this).attr('action'),
             data: $(this).serialize(),
             success: function (data) {
-               // console.log(data);
                 $('#insertDiv').html('<div id="filtrationDiv"></div><div id = "dataDiv" class= "pb-5" ></div >');
                 loadFiltrationBar(controller);
                 $('#dataDiv').html(data);

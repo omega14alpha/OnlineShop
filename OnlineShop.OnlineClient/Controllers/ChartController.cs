@@ -20,5 +20,20 @@ namespace OnlineShop.OnlineClient.Controllers
             var result = _worker.GetSalesManagersSums();
             return PartialView(result);
         }
+
+        [HttpGet]
+        public PartialViewResult MonthDropDownMenu()
+        {
+            var managers = _worker.GetManagerList();
+            return PartialView("MonthDropDownMenu", managers);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "user, admin")]
+        public IActionResult MonthSales(string manager)
+        {
+            var result = _worker.GetMonthSalesManagers(manager);
+            return PartialView("MonthSales", result);
+        }
     }
 }

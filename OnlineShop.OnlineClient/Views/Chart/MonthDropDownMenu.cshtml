@@ -1,0 +1,40 @@
+﻿@model IEnumerable<string>
+
+<div class="box-body pt-5 pl-5">
+    <div id="dropdown">
+        <div class="container">
+            <div class="row">
+                <div class="btn-group" id="dropdown_menu">
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manager</button>
+                    <div class="dropdown-menu">
+                        @foreach (var item in Model)
+                        {
+                            <div><a class="dropdown-item" asp-action="MonthSales" asp-controller="Chart" asp-for="@item">@item</a></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-body pt-5 pl-5">
+        <div id="chart_container"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#dropdown_menu a').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'post',
+            url: $(this).attr('href'),
+            data: { "manager": $(this).text() },
+            success: function(data) {
+                $('#chart_container').html('<canvas id="chart" style="width:100%; height:500px;"></canvas><div id="chart_block"></div>');
+                $('#chart_block').html(data);
+            },
+            error: function(req, status, error) {
+                console.log(error);
+            }
+        });
+    });
+</script>

@@ -2,6 +2,7 @@
 using OnlineShop.BusinessLogic.Models;
 using OnlineShop.DataAccess;
 using OnlineShop.DataAccess.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace OnlineShop.BusinessLogic
@@ -53,7 +54,8 @@ namespace OnlineShop.BusinessLogic
         {
             comonEntityCount = _dbUoW.Clients.GetCountByCondition(s => s.Name.StartsWith(filterModel.Data));
             var clientModels = new List<ClientModel>();
-            var clients = _dbUoW.Clients.GetRangeByCondition((pageNumber - 1) * totalSize, totalSize, s => s.Name.StartsWith(filterModel.Data));
+            var clients = _dbUoW.Clients.GetRangeByCondition((pageNumber - 1) * totalSize, totalSize, s => 
+            s.Name.StartsWith(filterModel.Data, StringComparison.InvariantCultureIgnoreCase));
             var displayedId = (pageNumber - 1) * totalSize + 1;
             foreach (var client in clients)
             {

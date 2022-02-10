@@ -70,39 +70,18 @@ namespace OnlineShop.BusinessLogic
 
             return orderModels;
         }
-
-        private IEnumerable<Order> GetPerception(int startNumber, int count, out int comonEntityCount, FilterDataModel filterModel)
-        {
-            if (filterModel.Field == "Manager")
+                
+        private IEnumerable<Order> GetPerception(int startNumber, int count, out int comonEntityCount, FilterDataModel filterModel) =>
+            filterModel.Field switch
             {
-                var entityId = _dbUoW.Managers.GetEntityByCondition(s => s.Surname.StartsWith(filterModel.Data)).Id;
-                comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ManagerId == entityId);
-                return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.ManagerId == entityId);
-            }
-            else if (filterModel.Field == "Client")
-            {
-                var entityId = _dbUoW.Clients.GetEntityByCondition(s => s.Name.StartsWith(filterModel.Data)).Id;
-                comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ClientId == entityId);
-                return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.ClientId == entityId);
-            }
-            else if (filterModel.Field == "Item")
-            {
-                var entityId = _dbUoW.Clients.GetEntityByCondition(s => s.Name.StartsWith(filterModel.Data)).Id;
-                comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ItemId == entityId);
-                return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.ItemId == entityId);
-            }
-            else if (filterModel.Field == "AmountOfMoney")
-            {
-                if (double.TryParse(filterModel.Data, out var number))
-                {
-                    comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.AmountOfMoney == number);
-                    return _dbUoW.Orders.GetRangeByCondition(startNumber, count, s => s.AmountOfMoney == number);
-                }
-            }
-
-            comonEntityCount = 0;
-            return null;
-        }
+                "Manager" => FiltrationByManager(startNumber, count, out comonEntityCount, filterModel.Data),
+                "Client" => FiltrationByClient(startNumber, count, out comonEntityCount, filterModel.Data),
+                "Item" => FiltrationByItem(startNumber, count, out comonEntityCount, filterModel.Data),
+                "AmountOfMoney" => FiltrationByPrice(startNumber, count, out comonEntityCount, filterModel.Data),
+                "Date" => FiltrationByDate(startNumber, count, out comonEntityCount, filterModel.Dates),
+                _ => throw new ArgumentException()
+            };
+        
 
         private OrderModel EntityToModel(Order order, int displayedId)
         {
@@ -139,6 +118,77 @@ namespace OnlineShop.BusinessLogic
             }
 
             return order;
+        }
+
+        private IEnumerable<Order> FiltrationByManager(int startNumber, int count, out int comonEntityCount, string strPart)
+        {
+            var entityId = _dbUoW.Managers.GetEntityByCondition(s => s.Surname.StartsWith(strPart, StringComparison.InvariantCultureIgnoreCase)).Id;
+            comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ManagerId == entityId);
+            return _dbUoW.Orders.GetRangeByConditionWithOrder(startNumber, count, s => s.ManagerId == entityId, d => d.Date);
+        }
+
+        private IEnumerable<Order> FiltrationByClient(int startNumber, int count, out int comonEntityCount, string strPart)
+        {
+            var entityId = _dbUoW.Clients.GetEntityByCondition(s => s.Name.StartsWith(strPart, StringComparison.InvariantCultureIgnoreCase)).Id;
+            comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ClientId == entityId);
+            return _dbUoW.Orders.GetRangeByConditionWithOrder(startNumber, count, s => s.ClientId == entityId, d => d.Date);
+        }
+
+        private IEnumerable<Order> FiltrationByItem(int startNumber, int count, out int comonEntityCount, string strPart)
+        {
+            var entityId = _dbUoW.Items.GetEntityByCondition(s => s.Name.StartsWith(strPart, StringComparison.InvariantCultureIgnoreCase)).Id;
+            comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.ItemId == entityId);
+            return _dbUoW.Orders.GetRangeByConditionWithOrder(startNumber, count, s => s.ItemId == entityId, d => d.Date);
+        }
+
+        private IEnumerable<Order> FiltrationByPrice(int startNumber, int count, out int comonEntityCount, string strPart)
+        {
+            if (double.TryParse(strPart, out var number))
+            {
+                comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.AmountOfMoney == number);
+                return _dbUoW.Orders.GetRangeByConditionWithOrder(startNumber, count, s => s.AmountOfMoney == number, d => d.Date);
+            }
+
+            comonEntityCount = 0;
+            return null;
+        }
+
+        private IEnumerable<Order> FiltrationByDate(int startNumber, int count, out int comonEntityCount, DateModel dates)
+        {
+            if (!string.IsNullOrWhiteSpace(dates.DateFrom) && !string.IsNullOrWhiteSpace(dates.DateTo))
+            {
+                return FiltrationByDateRange(startNumber, count, out comonEntityCount, dates);
+            }
+            else if (!string.IsNullOrWhiteSpace(dates.DateFrom))
+            {
+                return FiltrationByDateMoreThen(startNumber, count, out comonEntityCount, dates);
+            }
+            else
+            {
+                return FiltrationByDateLessThen(startNumber, count, out comonEntityCount, dates);
+            }
+        }
+
+        private IEnumerable<Order> FiltrationByDateRange(int startNumber, int count, out int comonEntityCount, DateModel dates)
+        {
+            var from = DateTime.ParseExact(dates.DateFrom, DatePattern, CultureInfo.InvariantCulture);
+            var to = DateTime.ParseExact(dates.DateTo, DatePattern, CultureInfo.InvariantCulture);
+            comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.Date >= from && s.Date <= to);
+            return _dbUoW.Orders.GetRangeByConditionWithOrder(startNumber, count, s => s.Date >= from && s.Date <= to, d => d.Date);
+        }
+
+        private IEnumerable<Order> FiltrationByDateMoreThen(int startNumber, int count, out int comonEntityCount, DateModel dates)
+        {
+            var from = DateTime.ParseExact(dates.DateFrom, DatePattern, CultureInfo.InvariantCulture);
+            comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.Date >= from);
+            return _dbUoW.Orders.GetRangeByConditionWithOrder(startNumber, count, s => s.Date >= from, d => d.Date);
+        }
+
+        private IEnumerable<Order> FiltrationByDateLessThen(int startNumber, int count, out int comonEntityCount, DateModel dates)
+        {
+            var to = DateTime.ParseExact(dates.DateTo, DatePattern, CultureInfo.InvariantCulture);
+            comonEntityCount = _dbUoW.Orders.GetCountByCondition(s => s.Date <= to);
+            return _dbUoW.Orders.GetRangeByConditionWithOrder(startNumber, count, s => s.Date <= to, d => d.Date);
         }
     }
 }

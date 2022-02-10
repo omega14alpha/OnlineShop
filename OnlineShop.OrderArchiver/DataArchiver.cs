@@ -71,13 +71,16 @@ namespace OnlineShop.OrderArchiver
             string managerName = fileNameModel.FullFileName.Split('_')[ManagerNameIndex];
             foreach (var data in _fileWorker.ReadFileData(fileNameModel.FullFilePath))
             {
-                try
+                if (!string.IsNullOrWhiteSpace(data))
                 {
-                    _orderWorker.SaveOrder(sessionGuid, $"{managerName};{data}");
-                }
-                catch (Exception ex)
-                {
-                    return false;
+                    try
+                    {
+                        _orderWorker.SaveOrder(sessionGuid, $"{managerName};{data}");
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
                 }
             }
 

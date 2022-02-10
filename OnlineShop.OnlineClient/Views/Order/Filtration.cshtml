@@ -1,25 +1,67 @@
-﻿<div class="container mt-3">
-    <div class="row">
-        <div class="col-auto">
-            <div class="input-group">
-                <div class="input-group-btn search-panel">
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span id="search_concept">Filter by</span>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" asp-action="Search" asp-controller="Order">Manager</a></li>
-                        <li><a class="dropdown-item" asp-action="Search" asp-controller="Order">Client</a></li>
-                        <li><a class="dropdown-item" asp-action="Search" asp-controller="Order">Item</a></li>
-                        <li><a class="dropdown-item" asp-action="Search" asp-controller="Order">AmountOfMoney</a></li>
-                    </ul>
+﻿<div class=" mt-3">
+    <div class="container">
+        <div class="bootstrap-iso">
+            <div class="row">
+                <div id="dateSearch">
+                    <form class="form-horizontal row ml-4" asp-action="Search" asp-controller="Order" method="post">
+                        <input type="hidden" id="hiddenField" value="Date" />
+                        <div class="form-group ">
+                            <label class="control-label col-sm-2" for="dateFrom">From</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input class="form-control" id="dateFrom" name="dateFrom" placeholder="dd.MM.yyyy" type="text" />
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar">
+                                        </i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label col-sm-2" for="dateTo">To</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input class="form-control" id="dateTo" name="dateTo" placeholder="dd.MM.yyyy" type="text" />
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar">
+                                        </i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="col-sm-7">
-            <div class="input-group">
-                <input type="hidden" id="search_param" />
-                <input class="form-control" id="fill_box" type="text" placeholder="Search term..." disabled />
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-auto">
+                <div class="input-group">
+                    <div class="input-group-btn search-panel">
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span id="search_concept">Filter by</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-action="Search" asp-controller="Order">Manager</a></li>
+                            <li><a class="dropdown-item" asp-action="Search" asp-controller="Order">Client</a></li>
+                            <li><a class="dropdown-item" asp-action="Search" asp-controller="Order">Item</a></li>
+                            <li><a class="dropdown-item" asp-action="Search" asp-controller="Order">AmountOfMoney</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="input-group">
+                    <input type="hidden" id="search_param" />
+                    <input class="form-control" id="fill_box" type="text" placeholder="Search term..." disabled />
+                </div>
             </div>
         </div>
     </div>

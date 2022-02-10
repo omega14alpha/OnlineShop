@@ -2,6 +2,7 @@
 using OnlineShop.BusinessLogic.Models;
 using OnlineShop.DataAccess;
 using OnlineShop.DataAccess.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace OnlineShop.BusinessLogic
@@ -51,7 +52,7 @@ namespace OnlineShop.BusinessLogic
 
         public IEnumerable<ManagerModel> Filtration(int pageNumber, int totalSize, out int comonEntityCount, FilterDataModel filterModel)
         {
-            comonEntityCount = _dbUoW.Managers.GetCountByCondition(s => s.Surname.StartsWith(filterModel.Data));
+            comonEntityCount = _dbUoW.Managers.GetCountByCondition(s => s.Surname.StartsWith(filterModel.Data, StringComparison.InvariantCultureIgnoreCase));
             var managers = _dbUoW.Managers.GetRangeByCondition((pageNumber - 1) * totalSize, totalSize, s => s.Surname.StartsWith(filterModel.Data));
             var managerModels = new List<ManagerModel>();
             var displayedId = (pageNumber - 1) * totalSize + 1;

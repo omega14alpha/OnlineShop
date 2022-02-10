@@ -9,6 +9,8 @@ namespace OnlineShop.DataAccess.Interfaces
 
         int GetCountByCondition(Func<TEntity, bool> condition);
 
+        IEnumerable<TEntity> GetEntities();
+
         IEnumerable<TEntity> GetRange(int startNumber, int count);
 
         IEnumerable<TEntity> GetRangeWithOrder<EType>(int startNumber, int count, Func<TEntity, EType> condition);
@@ -18,6 +20,8 @@ namespace OnlineShop.DataAccess.Interfaces
         TEntity GetEntityByCondition(Func<TEntity, bool> condition);
 
         TEntity GetOrAddEntity(TEntity entity, Func<TEntity, bool> condition);
+
+        IEnumerable<TEntity> GetRangeByConditionWithOrder<EType>(int startNumber, int count, Func<TEntity, bool> condition, Func<TEntity, EType> orderCondition);
 
         void AddEntity(TEntity entity);
 

@@ -4,12 +4,6 @@
     var YValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Units.Select(x => x.Quantity));
 }
 
-<div class="box-body pt-5 pl-5">
-    <div class="chart-container">
-        <canvas id="chart" style="width:100%; height:500px;"></canvas>
-    </div>
-</div>
-
 <script type="text/javascript">
     $(function () {
         var chartName = "chart";
